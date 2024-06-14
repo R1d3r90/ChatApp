@@ -1,0 +1,70 @@
+.App {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+.App-header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+}
+
+.App-main {
+  padding: 20px;
+}
+
+.App-footer {
+  padding: 10px;
+  background-color: #282c34;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.Chat {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.Messages {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.MessageInput {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.MessageInput input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+  flex-grow: 1;
+}
+
+.MessageInput button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.MessageInput button:hover {
+  background-color: #0056b3;
+}
