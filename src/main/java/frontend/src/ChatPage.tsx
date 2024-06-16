@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Chat.css';
+import './ChatPage.css';
 
 interface Message {
     id: number;
@@ -7,7 +7,7 @@ interface Message {
     sender: string;
 }
 
-const Chat: React.FC = () => {
+const ChatPage: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState('');
 
@@ -47,4 +47,4 @@ const Chat: React.FC = () => {
     );
 };
 
-export default Chat;
+export default ChatPage;

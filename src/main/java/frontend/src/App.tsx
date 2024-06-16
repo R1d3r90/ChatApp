@@ -1,20 +1,39 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
-import Chat from './Chat';
+import LoginPage from './LoginPage.tsx'
+import MainPage from './MainPage.tsx';
+import UserPage from './UserPage.tsx'
+import ChatPage from './ChatPage.tsx';
 
 function App() {
     return (
-        <div className="App">
-            <header className="App-header">
-                <h1>Chat App</h1>
-            </header>
-            <main className="App-main">
-                <Chat />
-            </main>
-            <footer className="App-footer">
-                <p>© 2024 Chat App. All rights reserved.</p>
-            </footer>
+        <Router>
+        <div>
+            <nav>
+                <ul>
+                    <li>
+                        <Link to="/">LoginPage</Link>
+                    </li>
+                    <li>
+                        <Link to="/MainPage">MainPage</Link>
+                    </li>
+                    <li>
+                        <Link to="/UserPage">UserPage</Link>
+                    </li>
+                    <li>
+                        <Link to="/ChatPage">ChatPage</Link>
+                    </li>
+                </ul>
+            </nav>
+            <Routes>
+                <Route path="/" element={<LoginPage />} />
+                <Route path="/MainPage" element={<MainPage/>}/>
+                <Route path="/UserPage" element={<UserPage />} />
+                <Route path="/ChatPage" element={<ChatPage />} />
+            </Routes>
         </div>
+        </Router>
     );
 }
 
