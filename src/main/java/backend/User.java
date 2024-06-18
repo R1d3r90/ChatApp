@@ -3,12 +3,10 @@ package backend;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "messages")
-public record Message(
+@Document(collection = "user")
+public record User(
         @Id String id,
-        String sender,
-        String receiver,
-        String content,
-        long timestamp
+        String githubId,
+        String email
 ) {
 }
