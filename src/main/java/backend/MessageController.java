@@ -1,5 +1,7 @@
 package backend;
 
+import backend.Message;
+import backend.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,5 +26,10 @@ public class MessageController {
     @GetMapping
     public List<Message> getAllMessages() {
         return messageService.getAllMessages();
+    }
+
+    @GetMapping("/{sender}/{receiver}")
+    public List<Message> getMessages(@PathVariable String sender, @PathVariable String receiver) {
+        return messageService.getMessages(sender, receiver);
     }
 }
