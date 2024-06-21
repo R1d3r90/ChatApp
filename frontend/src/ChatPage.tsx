@@ -36,7 +36,7 @@ const ChatPage: React.FC = () => {
 
     return (
         <div className="ChatPage">
-            <h1>Chat</h1>
+            <h1>ChatPage</h1>
             <input
                 type="text"
                 placeholder="Receiver"
