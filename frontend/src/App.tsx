@@ -1,13 +1,15 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
 import './App.css';
 import LoginPage from './LoginPage.tsx'
 import MainPage from './MainPage.tsx';
 import UserPage from './UserPage.tsx'
 import ChatPage from './ChatPage.tsx';
+import { AuthProvider } from './AuthProvider';
 
-function App() {
+const App: React.FC = () => {
     return (
+        <AuthProvider>
         <Router>
         <div>
             <nav>
@@ -34,6 +36,7 @@ function App() {
             </Routes>
         </div>
         </Router>
+        </AuthProvider>
     );
 }
 
