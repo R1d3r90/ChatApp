@@ -1,35 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useAuth } from './AuthProvider';
 
-const UserPage : React.FC = () => {
-    const [users, setUsers] = useState([]);
+const UserPage: React.FC = () => {
+    const { getUsers } = useAuth();
+    const [users, setUsers] = useState<string[]>([]);
 
-    const getUsers = async () => {
-        try {
-            const res = await axios.get('/api/users');
-            setUsers(res.data);
-        } catch (error) {
-            console.error('An error occurred while fetching users', error);
-        }
-    }
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const userList = await getUsers();
+                setUsers(userList);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
 
-    useEffect(() =>  {
-        getUsers();
-    }, []);
+        fetchUsers();
+    }, [getUsers]);
 
     return (
         <div>
-            <h1>All Users</h1>
-            {users.map(user => (
-                <div key={user.id}>
-                    {}
-                    <p><Link to={`/chat/${user.username}`}>{user.username}</Link></p>
-                    {}
-                </div>
-            ))}
+            <h1>User List</h1>
+            <ul>
+                {users.map((user) => (
+                    <li key={user.username}>{user.username}</li>
+                ))}
+            </ul>
         </div>
     );
-}
+};
 
 export default UserPage;

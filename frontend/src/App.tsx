@@ -6,6 +6,7 @@ import MainPage from './MainPage.tsx';
 import UserPage from './UserPage.tsx'
 import ChatPage from './ChatPage.tsx';
 import { AuthProvider } from './AuthProvider';
+import PrivateRoute from "./PrivateRoute.tsx";
 
 const App: React.FC = () => {
     return (
@@ -30,9 +31,11 @@ const App: React.FC = () => {
             </nav>
             <Routes>
                 <Route path="/" element={<LoginPage />} />
-                <Route path="/MainPage" element={<MainPage/>}/>
-                <Route path="/UserPage" element={<UserPage />} />
-                <Route path="/ChatPage" element={<ChatPage />} />
+                <Route element={<PrivateRoute/>}>
+                    <Route path="/MainPage" element={<MainPage/>} />
+                    <Route path="/UserPage" element={<UserPage/>} />
+                    <Route path="/ChatPage" element={<ChatPage/>} />
+                </Route>
             </Routes>
         </div>
         </Router>
