@@ -8,22 +8,31 @@ import java.util.List;
 
 @Service
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User registerUser(User user) {
-        User newUser = new User(user.username(), passwordEncoder.encode(user.password()));
-        return userRepository.save(newUser);
+    public void registerUser(User user) {
+        String encodedPassword = passwordEncoder.encode(user.password());
+        User newUser = new User(user.id(), user.username(), encodedPassword);
+        userRepository.save(newUser);
     }
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
-    public List<User> getAllUsers() {
+    public boolean authenticate(String username, String password) {
+        User user = findByUsername(username);
+        return user != null && passwordEncoder.matches(password, user.password());
+    }
+
+    public List<User> findAllUsers() {
         return userRepository.findAll();
     }
+
+
 }

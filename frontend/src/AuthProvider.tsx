@@ -1,45 +1,31 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-interface User {
-    username: string;
-}
-
 interface AuthContextType {
     isAuthenticated: boolean;
-    user: User | null;
+    user: any;
     login: (username: string, password: string) => Promise<void>;
-    register: (username: string, password: string) => Promise<void>;
     logout: () => void;
+    register: (username: string, password: string) => Promise<void>;
+    getUsers: () => Promise<any>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await fetch('/api/user', {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
+                const response = await fetch('/auth/user');
                 if (response.ok) {
                     const userData = await response.json();
                     setUser(userData);
                     setIsAuthenticated(true);
-                } else {
-                    setIsAuthenticated(false);
-                    setUser(null);
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
-                setIsAuthenticated(false);
-                setUser(null);
             }
         };
 
@@ -48,7 +34,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const login = async (username: string, password: string) => {
         try {
-            const response = await fetch('/api/login', {
+            const response = await fetch('/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -57,25 +43,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 credentials: 'include'
             });
             if (response.ok) {
-                const userData = await response.json();
-                setUser(userData);
+                const loggedInUsername = await response.text();
+                setUser({ username: loggedInUsername });
                 setIsAuthenticated(true);
             } else {
-                setIsAuthenticated(false);
-                setUser(null);
                 throw new Error('Login failed');
             }
         } catch (error) {
             console.error('Error logging in:', error);
-            setIsAuthenticated(false);
-            setUser(null);
             throw new Error('Login failed');
         }
     };
 
     const register = async (username: string, password: string) => {
         try {
-            const response = await fetch('/api/register', {
+            const response = await fetch('/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -97,25 +79,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     const logout = async () => {
-        try {
-            await fetch('/api/logout', {
-                method: 'POST',
-                credentials: 'include'
-            });
-        } catch (error) {
-            console.error('Error logging out:', error);
-        } finally {
-            setIsAuthenticated(false);
-            setUser(null);
-        }
+        await fetch('/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        });
+        setIsAuthenticated(false);
+        setUser(null);
     };
 
-    const getUsers = async (): Promise<User[]> => {
+    const getUsers = async () => {
         try {
-            const response = await fetch('/api/users');
+            const response = await fetch('/auth/user', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
             if (response.ok) {
-                const usersData: User[] = await response.json();
-                return usersData;
+                return await response.json();
             } else {
                 throw new Error('Failed to fetch users');
             }
@@ -125,9 +110,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     };
 
-
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, login, register, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, login, logout, register, getUsers }}>
             {children}
         </AuthContext.Provider>
     );
