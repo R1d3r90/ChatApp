@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import axios from 'axios';
 
 interface AuthContextType {
     isAuthenticated: boolean;
@@ -16,20 +17,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const checkAuth = async () => {
             try {
-                const response = await fetch('/auth/user');
-                if (response.ok) {
-                    const userData = await response.json();
-                    setUser(userData);
+                const response = await axios.get('/auth/check', { withCredentials: true});
+                if (response.status === 200) {
                     setIsAuthenticated(true);
+
+                    const userResponse = await axios.get('/auth/user', { withCredentials: true });
+                    if (userResponse.status === 200) {
+                        setUser(userResponse.data);
+                    }
+                } else {
+                    setIsAuthenticated(false);
                 }
             } catch (error) {
-                console.error('Error fetching user data:', error);
+                console.error('Error checking auth:', error);
+                setIsAuthenticated(false);
             }
         };
 
-        fetchUser();
+        checkAuth();
     }, []);
 
     const login = async (username: string, password: string) => {

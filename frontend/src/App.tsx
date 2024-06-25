@@ -19,24 +19,25 @@ const App: React.FC = () => {
                         <Link to="/">LoginPage</Link>
                     </li>
                     <li>
-                        <Link to="/MainPage">MainPage</Link>
+                        <Link to="/app/MainPage">MainPage</Link>
                     </li>
                     <li>
-                        <Link to="/UserPage">UserPage</Link>
+                        <Link to="/app/UserPage">UserPage</Link>
                     </li>
                     <li>
-                        <Link to="/ChatPage">ChatPage</Link>
+                        <Link to="/app/ChatPage">ChatPage</Link>
                     </li>
                 </ul>
             </nav>
             <Routes>
                 <Route path="/" element={<LoginPage />} />
-                <Route element={<PrivateRoute/>}>
-                    <Route path="/MainPage" element={<MainPage/>} />
-                    <Route path="/UserPage" element={<UserPage/>} />
-                    <Route path="/ChatPage" element={<ChatPage/>} />
+                <Route path="/app" element={<PrivateRoute/>}>
+                    <Route path="MainPage" element={<MainPage />}  />
+                    <Route path="UserPage" element={<UserPage />} />
+                    <Route path="ChatPage" element={<ChatPage />} />
                 </Route>
             </Routes>
+
         </div>
         </Router>
         </AuthProvider>
