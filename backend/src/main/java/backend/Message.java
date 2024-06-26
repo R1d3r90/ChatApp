@@ -6,8 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "messages")
 public record Message(
         @Id String id,
-        String sender,
-        String receiver,
+        String senderId,
+        String receiverId,
         String content,
         long timestamp
 ) {
