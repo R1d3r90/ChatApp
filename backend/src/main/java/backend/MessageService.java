@@ -3,6 +3,8 @@ package backend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MessageService {
 
@@ -13,7 +15,12 @@ public class MessageService {
         this.messageRepository = messageRepository;
     }
 
-    public Message save(Message message) {
-        return messageRepository.save(message);
+    public void sendMessage(Message message) {
+        message.setTimestamp(System.currentTimeMillis());
+        messageRepository.save(message);
+    }
+
+    public List<Message> getMessage() {
+        return messageRepository.findAll();
     }
 }
