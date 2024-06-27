@@ -1,20 +1,25 @@
 package backend;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/messages")
 public class MessageController {
 
     @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
+    private MessageService messageService;
 
-    @MessageMapping("/chat")
-    public void sendPrivateMessage(@Payload Message message) {
-        simpMessagingTemplate.convertAndSendToUser(
-                message.receiverId(), "/queue/messages", message);
+    @PostMapping("/send")
+    public void sendPrivateMessage(@RequestBody Message message) {
+        messageService.sendMessage(message);
+    }
+
+    @GetMapping("{id}")
+    public List<Message> getAllMessages() {
+        return messageService.getMessage();
+
     }
 }

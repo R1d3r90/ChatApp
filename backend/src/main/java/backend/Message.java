@@ -7,8 +7,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public record Message(
         @Id String id,
         String senderId,
+        String senderName,
         String receiverId,
+        String receiverName,
         String content,
         long timestamp
 ) {
+    public void setTimestamp(long l) {
+    }
 }

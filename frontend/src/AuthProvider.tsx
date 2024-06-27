@@ -1,29 +1,35 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
 
+interface User {
+    userId: string;
+    username: string;
+}
+
 interface AuthContextType {
     isAuthenticated: boolean;
-    user: any;
+    user: User | null;
     login: (username: string, password: string) => Promise<void>;
-    logout: () => void;
+    logout: () => Promise<void>;
     register: (username: string, password: string) => Promise<void>;
-    getUsers: () => Promise<any>;
+    getUsers: () => Promise<User[]>;
+    deleteUser: (userId: string) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await axios.get('/auth/check', { withCredentials: true});
+                const response = await axios.get('/auth/check', { withCredentials: true });
                 if (response.status === 200) {
                     setIsAuthenticated(true);
 
-                    const userResponse = await axios.get('/auth/user', { withCredentials: true });
+                    const userResponse = await axios.get<User>('/auth/user', { withCredentials: true });
                     if (userResponse.status === 200) {
                         setUser(userResponse.data);
                     }
@@ -51,7 +57,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             });
             if (response.ok) {
                 const loggedInUsername = await response.text();
-                setUser({ username: loggedInUsername });
+                setUser({ userId: loggedInUsername, username }); // Annahme, dass der Server nur den Benutzernamen zurückgibt
                 setIsAuthenticated(true);
             } else {
                 throw new Error('Login failed');
@@ -74,7 +80,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             });
             if (response.ok) {
                 const registeredUsername = await response.text();
-                setUser({ username: registeredUsername });
+                setUser({ userId: registeredUsername, username }); // Annahme, dass der Server nur den Benutzernamen zurückgibt
                 setIsAuthenticated(true);
             } else {
                 throw new Error('Registration failed');
@@ -86,15 +92,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     const logout = async () => {
-        await fetch('/auth/logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include'
-        });
-        setIsAuthenticated(false);
-        setUser(null);
+        try {
+            await fetch('/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include'
+            });
+            setIsAuthenticated(false);
+            setUser(null);
+        } catch (error) {
+            console.error('Error logging out:', error);
+            throw new Error('Logout failed');
+        }
     };
 
     const getUsers = async () => {
@@ -107,7 +118,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 credentials: 'include'
             });
             if (response.ok) {
-                return await response.json();
+                return await response.json() as User[];
             } else {
                 throw new Error('Failed to fetch users');
             }
@@ -117,14 +128,40 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     };
 
+    const deleteUser = async (userId: string) => {
+        try {
+            await axios.delete(`/auth/user/${userId}`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            });
+            setIsAuthenticated(false);
+            setUser(null);
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            throw new Error('Failed to delete user');
+        }
+    };
+
+    const authContextValue: AuthContextType = {
+        isAuthenticated,
+        user,
+        login,
+        logout,
+        register,
+        getUsers,
+        deleteUser,
+    };
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, login, logout, register, getUsers }}>
+        <AuthContext.Provider value={authContextValue}>
             {children}
         </AuthContext.Provider>
     );
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
     const context = useContext(AuthContext);
     if (!context) {
         throw new Error('useAuth must be used within an AuthProvider');

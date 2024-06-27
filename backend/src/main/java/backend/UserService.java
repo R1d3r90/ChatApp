@@ -34,5 +34,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-
+    public void deleteByUsername(String username) {
+        userRepository.deleteByUsername(username);
+    }
 }
