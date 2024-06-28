@@ -15,21 +15,22 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    public ResponseEntity<User> register(@RequestBody User user) {
         if (userService.findByUsername(user.username()) != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        userService.registerUser(user);
-        return ResponseEntity.ok(user.username());
+        User registeredUser = userService.registerUser(user);
+        return ResponseEntity.ok(registeredUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<User> login(@RequestBody User user) {
         boolean authenticated = userService.authenticate(user.username(), user.password());
         if (authenticated) {
-            return ResponseEntity.ok(user.username());
+            User loggedInUser = userService.findByUsername(user.username());
+            return ResponseEntity.ok(loggedInUser);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 
@@ -39,10 +40,10 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @DeleteMapping("/user/{username}")
-    public ResponseEntity<String> deleteUser(@PathVariable String username) {
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable String id) {
         try {
-            userService.deleteByUsername(username);
+            userService.deleteUser(id);
             return ResponseEntity.ok("User deleted successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user");

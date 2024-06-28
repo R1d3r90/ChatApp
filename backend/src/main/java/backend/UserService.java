@@ -15,10 +15,10 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void registerUser(User user) {
+    public User registerUser(User user) {
         String encodedPassword = passwordEncoder.encode(user.password());
         User newUser = new User(user.id(), user.username(), encodedPassword);
-        userRepository.save(newUser);
+        return userRepository.save(newUser);
     }
 
     public User findByUsername(String username) {
@@ -34,7 +34,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void deleteByUsername(String username) {
-        userRepository.deleteByUsername(username);
+    public void deleteUser(String id) {
+        userRepository.deleteById(id);
     }
 }

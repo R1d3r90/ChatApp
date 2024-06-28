@@ -15,12 +15,11 @@ public class MessageService {
         this.messageRepository = messageRepository;
     }
 
-    public void sendMessage(Message message) {
-        message.setTimestamp(System.currentTimeMillis());
-        messageRepository.save(message);
+    public List<Message> getMessagesBetweenUsers(String userId1, String userId2) {
+        return messageRepository.findBySenderIdAndReceiverIdOrReceiverIdAndSenderId(userId1, userId2, userId1, userId2);
     }
 
-    public List<Message> getMessage() {
-        return messageRepository.findAll();
+    public void sendMessage(Message message) {
+        messageRepository.save(message);
     }
 }

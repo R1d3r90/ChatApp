@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthProvider';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 interface User {
@@ -11,6 +10,8 @@ interface User {
 interface Message {
     senderId: string;
     senderName: string;
+    receiverId: string;
+    receiverName: string;
     content: string;
 }
 
@@ -28,6 +29,9 @@ const MainPage: React.FC = () => {
     useEffect(() => {
         if (selectedUser) {
             fetchMessages(selectedUser.id);
+            const intervalId = setInterval(() =>
+                fetchMessages(selectedUser.id), 3000);
+            return () => clearInterval(intervalId);
         }
     }, [selectedUser]);
 
@@ -41,8 +45,10 @@ const MainPage: React.FC = () => {
     };
 
     const fetchMessages = async (userId: string) => {
+        if (!user) return;
+
         try {
-            const response = await axios.get<Message[]>(`/api/messages/${userId}`);
+            const response = await axios.get<Message[]>(`/api/messages/${user.id}/${userId}`);
             setMessages(response.data);
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -58,19 +64,22 @@ const MainPage: React.FC = () => {
 
         if (!selectedUser || !user) return;
 
-        const message = {
-            senderId: user.userId,
+        const message: Message = {
+            senderId: user.id,
             senderName: user.username,
             receiverId: selectedUser.id,
-            content: input
+            receiverName: selectedUser.username,
+            content: input,
         };
 
         try {
-            await axios.post(`/api/messages/send`, message);
-            // Optimistic UI update: Add message immediately to local state
+            const response = await axios.post('/api/messages/send', message);
+            const savedMessage = response.data;
+
+            // Add the saved message to the local state
             setMessages((prevMessages) => [
                 ...prevMessages,
-                { ...message, timestamp: Date.now() }
+                savedMessage
             ]);
         } catch (error) {
             console.error('Error sending message:', error);
@@ -89,8 +98,8 @@ const MainPage: React.FC = () => {
 
     const handleDeleteUser = async () => {
         try {
-            if (user?.userId) {
-                await deleteUser(user.userId);
+            if (user?.id) {
+                await deleteUser(user.id);
                 fetchUsers();
                 setSelectedUser(null);
             } else {
@@ -119,7 +128,7 @@ const MainPage: React.FC = () => {
                         <h1>Chat with {selectedUser.username}</h1>
                         <div>
                             {messages.map((message, index) => (
-                                <div key={index} className={message.senderId === user?.userId ? "outgoing" : "incoming"}>
+                                <div key={index} className={message.senderId === user?.id ? "outgoing" : "incoming"}>
                                     <strong>{message.senderName}: </strong>
                                     {message.content}
                                 </div>
