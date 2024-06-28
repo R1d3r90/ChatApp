@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import axios from 'axios';
 
 interface User {
-    userId: string;
+    id: string;
     username: string;
 }
 
@@ -56,8 +56,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 credentials: 'include'
             });
             if (response.ok) {
-                const loggedInUsername = await response.text();
-                setUser({ userId: loggedInUsername, username }); // Annahme, dass der Server nur den Benutzernamen zurückgibt
+                const loggedInUser = await response.json();
+                setUser({ id: loggedInUser.id, username: loggedInUser.username });
                 setIsAuthenticated(true);
             } else {
                 throw new Error('Login failed');
@@ -79,8 +79,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 credentials: 'include'
             });
             if (response.ok) {
-                const registeredUsername = await response.text();
-                setUser({ userId: registeredUsername, username }); // Annahme, dass der Server nur den Benutzernamen zurückgibt
+                const registeredUser = await response.json();
+                setUser({ id: registeredUser.id, username: registeredUser.username });
                 setIsAuthenticated(true);
             } else {
                 throw new Error('Registration failed');

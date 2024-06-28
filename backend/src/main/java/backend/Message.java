@@ -10,9 +10,6 @@ public record Message(
         String senderName,
         String receiverId,
         String receiverName,
-        String content,
-        long timestamp
+        String content
 ) {
-    public void setTimestamp(long l) {
-    }
 }

@@ -12,14 +12,13 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @GetMapping("/{userId1}/{userId2}")
+    public List<Message> getMessages(@PathVariable String userId1, @PathVariable String userId2) {
+        return messageService.getMessagesBetweenUsers(userId1, userId2);
+    }
+
     @PostMapping("/send")
     public void sendPrivateMessage(@RequestBody Message message) {
         messageService.sendMessage(message);
-    }
-
-    @GetMapping("{id}")
-    public List<Message> getAllMessages() {
-        return messageService.getMessage();
-
     }
 }
