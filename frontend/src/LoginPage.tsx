@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { useAuth } from './AuthProvider';
 import './LoginPage.css';
+import {useNavigate} from "react-router-dom";
+
 
 const LoginPage: React.FC = () => {
     const { login, register } = useAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             await login(username, password);
+            navigate('/app/MainPage');
         } catch (err) {
             setError('Login failed');
         }
@@ -21,6 +25,7 @@ const LoginPage: React.FC = () => {
         e.preventDefault();
         try {
             await register(username, password);
+            navigate('/app/MainPage');
         } catch (err) {
             setError('Registration failed');
         }
