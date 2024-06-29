@@ -59,7 +59,7 @@ const LoginPage: React.FC = () => {
                     {error && <div className="error-message">{error}</div>}
                     <button className="login-button" type="submit">Login</button>
                 </form>
-                <h2>Or Register</h2>
+                <h1>Or Register</h1>
                 <form onSubmit={handleRegister}>
                     <div className="form-group">
                         <label htmlFor="reg-username">Username</label>

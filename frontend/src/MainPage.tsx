@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthProvider';
 import axios from 'axios';
+import './MainPage.css';
 
 interface User {
     id: string;
