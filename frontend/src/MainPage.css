@@ -3,10 +3,12 @@
     display: flex;
     background-color: #f0f0f0;
     padding: 20px;
+    flex-direction: row;
+    flex-wrap: nowrap;
 }
 
 .user-list-container {
-    width: 200px;
+    flex: 0 0 200px;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
@@ -19,7 +21,7 @@
 }
 
 .user-list-container.closed {
-    width: 50px;
+    flex: 0 0 50px;
 }
 
 .user-list-container.hidden {
@@ -38,7 +40,7 @@
 }
 
 .chat {
-    width: 70%;
+    width: 100%;
     max-width: 700px;
     padding: 20px;
     background-color: #fff;
@@ -53,19 +55,26 @@
 @media screen and (max-width: 768px) {
     .main-page {
         flex-direction: column;
+        padding: 10px;
     }
 
     .user-list-container {
+        flex: 0 0 auto;
         width: 100%;
-        margin-bottom: 20px;
+        padding: 10px;
+        margin-bottom: 10px;
         max-height: none;
         overflow-y: visible;
+        box-shadow: none;
+        border-radius: 0;
     }
 
     .chat {
         width: 100%;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         max-height: none;
         overflow-y: visible;
+        box-shadow: none;
+        border-radius: 0;
     }
 }
