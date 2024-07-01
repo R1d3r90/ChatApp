@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import LoginPage from './LoginPage.tsx'
 import MainPage from './MainPage.tsx';
 import { AuthProvider } from './AuthProvider';
@@ -11,14 +11,7 @@ const App: React.FC = () => {
         <Router>
         <div>
             <nav>
-                <ul>
-                    <li>
-                        <Link to="/">LoginPage</Link>
-                    </li>
-                    <li>
-                        <Link to="/app/MainPage/">MainPage</Link>
-                    </li>
-                </ul>
+                <h1>ChatApp</h1>
             </nav>
             <Routes>
                 <Route path="/" element={<LoginPage />} />
@@ -26,7 +19,6 @@ const App: React.FC = () => {
                     <Route path="MainPage/" element={<MainPage />}  />
                 </Route>
             </Routes>
-
         </div>
         </Router>
         </AuthProvider>
