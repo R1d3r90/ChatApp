@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from './AuthProvider';
+import React, {useState, useEffect} from 'react';
+import {useAuth} from './AuthProvider';
 import axios from 'axios';
 import './MainPage.css';
 
@@ -17,7 +17,7 @@ interface Message {
 }
 
 const MainPage: React.FC = () => {
-    const { getUsers, user, logout, deleteUser } = useAuth();
+    const {getUsers, user, logout, deleteUser} = useAuth();
     const [usersList, setUsersList] = useState<User[]>([]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
@@ -77,7 +77,6 @@ const MainPage: React.FC = () => {
             const response = await axios.post('/api/messages/send', message);
             const savedMessage = response.data;
 
-            // Add the saved message to the local state
             setMessages((prevMessages) => [
                 ...prevMessages,
                 savedMessage
