@@ -21,7 +21,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().permitAll()
                 )
-                .httpBasic().disable();
+                .httpBasic(AbstractHttpConfigurer::disable);
 
         return http.build();
     }

@@ -11,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-public class UserServiceTest {
+public class UserServiceUnitTest {
 
     @InjectMocks
     private UserService userService;
