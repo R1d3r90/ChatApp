@@ -6,13 +6,16 @@ import './MainPage.css';
 interface User {
     id: string;
     username: string;
+    userIcon: string;
 }
 
 interface Message {
     senderId: string;
     senderName: string;
+    senderIcon: string;
     receiverId: string;
     receiverName: string;
+    receiverIcon: string;
     content: string;
 }
 
@@ -68,8 +71,10 @@ const MainPage: React.FC = () => {
         const message: Message = {
             senderId: user.id,
             senderName: user.username,
+            senderIcon: user.userIcon,
             receiverId: selectedUser.id,
             receiverName: selectedUser.username,
+            receiverIcon: selectedUser.userIcon,
             content: input,
         };
 
@@ -112,11 +117,22 @@ const MainPage: React.FC = () => {
 
     return (
         <div className="main-page">
+            <div className="header">
+                <div className="current-user">
+                    {user && (
+                        <>
+                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
+                            <span>{user.username}</span>
+                        </>
+                    )}
+                </div>
+            </div>
             <div className="user-list-container">
                 <h2>Users</h2>
                 <ul>
                     {usersList.map((user) => (
                         <li key={user.id} onClick={() => handleUserClick(user)}>
+                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
                             {user.username}
                         </li>
                     ))}
@@ -126,9 +142,10 @@ const MainPage: React.FC = () => {
                 {selectedUser && (
                     <div className="chat">
                         <h1>Chat with {selectedUser.username}</h1>
-                        <div>
+                        <div className="chat-messages">
                             {messages.map((message, index) => (
                                 <div key={index} className={message.senderId === user?.id ? "outgoing" : "incoming"}>
+                                    <img src={`/icons/${message.senderIcon}`} alt="Sender Icon" className="user-icon" />
                                     <strong>{message.senderName}: </strong>
                                     {message.content}
                                 </div>

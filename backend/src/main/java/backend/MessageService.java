@@ -9,10 +9,12 @@ import java.util.List;
 public class MessageService {
 
     private final MessageRepository messageRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public MessageService(MessageRepository messageRepository) {
+    public MessageService(MessageRepository messageRepository, UserRepository userRepository) {
         this.messageRepository = messageRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Message> getMessagesBetweenUsers(String userId1, String userId2) {
@@ -20,6 +22,20 @@ public class MessageService {
     }
 
     public void sendMessage(Message message) {
-        messageRepository.save(message);
+        User sender = userRepository.findById(message.senderId()).orElseThrow(() -> new RuntimeException("Sender not found"));
+        User receiver = userRepository.findById(message.receiverId()).orElseThrow(() -> new RuntimeException("Receiver not found"));
+
+        Message newMessage = new Message(
+                null,
+                sender.id(),
+                sender.username(),
+                sender.userIcon(),
+                receiver.id(),
+                receiver.username(),
+                receiver.userIcon(),
+                message.content()
+        );
+
+        messageRepository.save(newMessage);
     }
 }

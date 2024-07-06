@@ -4,6 +4,7 @@ import axios from 'axios';
 interface User {
     id: string;
     username: string;
+    userIcon: string;
 }
 
 interface AuthContextType {
@@ -57,7 +58,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             });
             if (response.ok) {
                 const loggedInUser = await response.json();
-                setUser({id: loggedInUser.id, username: loggedInUser.username});
+                setUser({id: loggedInUser.id, username: loggedInUser.username, userIcon: loggedInUser.userIcon});
                 setIsAuthenticated(true);
             } else {
                 throw new Error('Login failed');
@@ -80,7 +81,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
             });
             if (response.ok) {
                 const registeredUser = await response.json();
-                setUser({id: registeredUser.id, username: registeredUser.username});
+                setUser({id: registeredUser.id, username: registeredUser.username, userIcon: registeredUser.userIcon});
                 setIsAuthenticated(true);
             } else {
                 throw new Error('Registration failed');

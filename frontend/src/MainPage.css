@@ -7,6 +7,13 @@
     flex-wrap: nowrap;
 }
 
+.user-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
 .user-list-container {
     flex: 0 0 200px;
     padding: 20px;

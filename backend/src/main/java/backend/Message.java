@@ -8,8 +8,10 @@ public record Message(
         @Id String id,
         String senderId,
         String senderName,
+        String senderIcon,
         String receiverId,
         String receiverName,
+        String receiverIcon,
         String content
 ) {
 }

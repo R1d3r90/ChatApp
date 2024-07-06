@@ -33,7 +33,7 @@ public class UserControllerIntegrationTest {
     @DirtiesContext
     @Test
     public void testRegisterUser() throws Exception {
-        User user = new User(null, "testUser", "testPassword");
+        User user = new User(null, "testUser", "testPassword", null );
 
         ResultActions resultActions = mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -48,8 +48,8 @@ public class UserControllerIntegrationTest {
     @DirtiesContext
     @Test
     public void testLoginUser() throws Exception {
-        User user = new User(null, "testUser", "testPassword");
-        userRepository.save(new User(null, "testUser", passwordEncoder.encode(user.password())));
+        User user = new User(null, "testUser", "testPassword", null);
+        userRepository.save(new User(null, "testUser", passwordEncoder.encode(user.password()), null));
 
         ResultActions resultActions = mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -61,7 +61,7 @@ public class UserControllerIntegrationTest {
     @DirtiesContext
     @Test
     public void testGetUsers() throws Exception {
-        User user = new User(null, "testUser", "testPassword");
+        User user = new User(null, "testUser", "testPassword", null);
         userRepository.save(user);
 
         mockMvc.perform(get("/auth/user"))
@@ -72,7 +72,7 @@ public class UserControllerIntegrationTest {
     @DirtiesContext
     @Test
     public void testDeleteUser() throws Exception {
-        User user = new User(null, "testUser", "testPassword");
+        User user = new User(null, "testUser", "testPassword", null);
         User savedUser = userRepository.save(user);
 
         mockMvc.perform(delete("/auth/user/" + savedUser.id()))

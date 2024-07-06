@@ -29,9 +29,9 @@ public class UserServiceUnitTest {
 
     @Test
     public void testRegisterUser() {
-        User user = new User("1", "testUser", "password");
+        User user = new User("1", "testUser", "password", null);
         when(passwordEncoder.encode(user.password())).thenReturn("encodedPassword");
-        when(userRepository.save(any(User.class))).thenReturn(new User("1", "testUser", "encodedPassword"));
+        when(userRepository.save(any(User.class))).thenReturn(new User("1", "testUser", "encodedPassword", null));
 
         User registeredUser = userService.registerUser(user);
 
@@ -41,7 +41,7 @@ public class UserServiceUnitTest {
 
     @Test
     public void testFindByUsername() {
-        User user = new User("1", "testUser", "password");
+        User user = new User("1", "testUser", "password", null);
         when(userRepository.findByUsername("testUser")).thenReturn(user);
 
         User foundUser = userService.findByUsername("testUser");
@@ -51,7 +51,7 @@ public class UserServiceUnitTest {
 
     @Test
     public void testAuthenticate() {
-        User user = new User("1", "testUser", "encodedPassword");
+        User user = new User("1", "testUser", "encodedPassword", null);
         when(userRepository.findByUsername("testUser")).thenReturn(user);
         when(passwordEncoder.matches("password", "encodedPassword")).thenReturn(true);
 
