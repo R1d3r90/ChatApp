@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, {createContext, useContext, useState, useEffect, ReactNode} from 'react';
 import axios from 'axios';
 
 interface User {
@@ -18,18 +18,18 @@ interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await axios.get('/auth/check', { withCredentials: true });
+                const response = await axios.get('/auth/check', {withCredentials: true});
                 if (response.status === 200) {
                     setIsAuthenticated(true);
 
-                    const userResponse = await axios.get<User>('/auth/user', { withCredentials: true });
+                    const userResponse = await axios.get<User>('/auth/user', {withCredentials: true});
                     if (userResponse.status === 200) {
                         setUser(userResponse.data);
                     }
@@ -52,12 +52,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({username, password}),
                 credentials: 'include'
             });
             if (response.ok) {
                 const loggedInUser = await response.json();
-                setUser({ id: loggedInUser.id, username: loggedInUser.username });
+                setUser({id: loggedInUser.id, username: loggedInUser.username});
                 setIsAuthenticated(true);
             } else {
                 throw new Error('Login failed');
@@ -75,12 +75,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({username, password}),
                 credentials: 'include'
             });
             if (response.ok) {
                 const registeredUser = await response.json();
-                setUser({ id: registeredUser.id, username: registeredUser.username });
+                setUser({id: registeredUser.id, username: registeredUser.username});
                 setIsAuthenticated(true);
             } else {
                 throw new Error('Registration failed');

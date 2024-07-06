@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useAuth } from './AuthProvider';
+import React, {useState} from 'react';
+import {useAuth} from './AuthProvider';
 import './LoginPage.css';
 import {useNavigate} from "react-router-dom";
 
 
 const LoginPage: React.FC = () => {
-    const { login, register } = useAuth();
+    const {login, register} = useAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
