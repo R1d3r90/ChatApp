@@ -6,15 +6,17 @@ import {useNavigate} from "react-router-dom";
 
 const LoginPage: React.FC = () => {
     const {login, register} = useAuth();
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [loginUsername, setLoginUsername] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
+    const [regUsername, setRegUsername] = useState('');
+    const [regPassword, setRegPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await login(username, password);
+            await login(loginUsername, loginPassword);
             navigate('/app/MainPage');
         } catch (err) {
             setError('Login failed');
@@ -24,7 +26,7 @@ const LoginPage: React.FC = () => {
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await register(username, password);
+            await register(regUsername, regPassword);
             navigate('/app/MainPage');
         } catch (err) {
             setError('Registration failed');
@@ -41,8 +43,8 @@ const LoginPage: React.FC = () => {
                         <input
                             type="text"
                             id="username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={loginUsername}
+                            onChange={(e) => setLoginUsername(e.target.value)}
                             required
                         />
                     </div>
@@ -51,8 +53,8 @@ const LoginPage: React.FC = () => {
                         <input
                             type="password"
                             id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={loginPassword}
+                            onChange={(e) => setLoginPassword(e.target.value)}
                             required
                         />
                     </div>
@@ -66,8 +68,8 @@ const LoginPage: React.FC = () => {
                         <input
                             type="text"
                             id="reg-username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={regUsername}
+                            onChange={(e) => setRegUsername(e.target.value)}
                             required
                         />
                     </div>
@@ -76,8 +78,8 @@ const LoginPage: React.FC = () => {
                         <input
                             type="password"
                             id="reg-password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={regPassword}
+                            onChange={(e) => setRegPassword(e.target.value)}
                             required
                         />
                     </div>
