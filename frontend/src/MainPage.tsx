@@ -121,6 +121,7 @@ const MainPage: React.FC = () => {
                 <div className="current-user">
                     {user && (
                         <>
+                            <h2>Welcome</h2>
                             <img src={`http://localhost:8080/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
                             <span>{user.username}</span>
                         </>
