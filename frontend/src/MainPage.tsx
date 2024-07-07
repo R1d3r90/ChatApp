@@ -25,7 +25,6 @@ const MainPage: React.FC = () => {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
-    const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
     useEffect(() => {
         fetchUsers();
@@ -123,7 +122,7 @@ const MainPage: React.FC = () => {
                     {user && (
                         <>
                             <h2>Welcome</h2>
-                            <img src={`${baseUrl}/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
+                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
                             <span>{user.username}</span>
                         </>
                     )}
