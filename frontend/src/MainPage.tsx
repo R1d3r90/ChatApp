@@ -121,7 +121,7 @@ const MainPage: React.FC = () => {
                 <div className="current-user">
                     {user && (
                         <>
-                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
+                            <img src={`http://localhost:8080/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
                             <span>{user.username}</span>
                         </>
                     )}
@@ -132,7 +132,7 @@ const MainPage: React.FC = () => {
                 <ul>
                     {usersList.map((user) => (
                         <li key={user.id} onClick={() => handleUserClick(user)}>
-                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
+                            <img src={`http://localhost:8080/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
                             {user.username}
                         </li>
                     ))}
@@ -145,7 +145,7 @@ const MainPage: React.FC = () => {
                         <div className="chat-messages">
                             {messages.map((message, index) => (
                                 <div key={index} className={message.senderId === user?.id ? "outgoing" : "incoming"}>
-                                    <img src={`/icons/${message.senderIcon}`} alt="Sender Icon" className="user-icon" />
+                                    <img src={`http://localhost:8080/icons/${message.senderIcon}`} alt="Sender Icon" className="user-icon" />
                                     <strong>{message.senderName}: </strong>
                                     {message.content}
                                 </div>

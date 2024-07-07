@@ -7,11 +7,29 @@
     flex-wrap: nowrap;
 }
 
+.current-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    margin-bottom: 20px;
+}
+
 .user-icon {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
     margin-right: 10px;
+}
+
+.current-user span {
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .user-list-container {
