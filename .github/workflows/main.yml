@@ -106,7 +106,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           organization: 'hubert'
-          project: 'ChatApp'
+          project: 'OHubert90_ChatApp'
           token: ${{ secrets.SONAR_TOKEN }}
 
   deploy:
