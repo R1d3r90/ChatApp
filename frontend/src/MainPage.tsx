@@ -53,7 +53,7 @@ const MainPage: React.FC = () => {
         if (!user) return;
 
         try {
-            const response = await axios.get<Message[]>(`${baseUrl}/api/messages/${user.id}/${userId}`);
+            const response = await axios.get<Message[]>(`/api/messages/${user.id}/${userId}`);
             setMessages(response.data);
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -80,7 +80,7 @@ const MainPage: React.FC = () => {
         };
 
         try {
-            const response = await axios.post('${baseUrl}/api/messages/send', message);
+            const response = await axios.post('/api/messages/send', message);
             const savedMessage = response.data;
 
             setMessages((prevMessages) => [
