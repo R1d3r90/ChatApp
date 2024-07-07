@@ -80,7 +80,7 @@ const MainPage: React.FC = () => {
         };
 
         try {
-            const response = await axios.post('${baseUrl}/api/messages/send', message);
+            const response = await axios.post('/api/messages/send', message);
             const savedMessage = response.data;
 
             setMessages((prevMessages) => [
@@ -123,7 +123,7 @@ const MainPage: React.FC = () => {
                     {user && (
                         <>
                             <h2>Welcome</h2>
-                            <img src={`${baseUrl}/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
+                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
                             <span>{user.username}</span>
                         </>
                     )}
