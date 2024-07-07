@@ -25,6 +25,7 @@ const MainPage: React.FC = () => {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
+    const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
 
     useEffect(() => {
         fetchUsers();
@@ -52,7 +53,7 @@ const MainPage: React.FC = () => {
         if (!user) return;
 
         try {
-            const response = await axios.get<Message[]>(`/api/messages/${user.id}/${userId}`);
+            const response = await axios.get<Message[]>(`${baseUrl}/api/messages/${user.id}/${userId}`);
             setMessages(response.data);
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -79,7 +80,7 @@ const MainPage: React.FC = () => {
         };
 
         try {
-            const response = await axios.post('/api/messages/send', message);
+            const response = await axios.post('${baseUrl}/api/messages/send', message);
             const savedMessage = response.data;
 
             setMessages((prevMessages) => [
@@ -122,7 +123,7 @@ const MainPage: React.FC = () => {
                     {user && (
                         <>
                             <h2>Welcome</h2>
-                            <img src={`http://localhost:8080/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
+                            <img src={`${baseUrl}/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
                             <span>{user.username}</span>
                         </>
                     )}
@@ -133,7 +134,7 @@ const MainPage: React.FC = () => {
                 <ul>
                     {usersList.map((user) => (
                         <li key={user.id} onClick={() => handleUserClick(user)}>
-                            <img src={`http://localhost:8080/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
+                            <img src={`${baseUrl}/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
                             {user.username}
                         </li>
                     ))}
@@ -146,7 +147,7 @@ const MainPage: React.FC = () => {
                         <div className="chat-messages">
                             {messages.map((message, index) => (
                                 <div key={index} className={message.senderId === user?.id ? "outgoing" : "incoming"}>
-                                    <img src={`http://localhost:8080/icons/${message.senderIcon}`} alt="Sender Icon" className="user-icon" />
+                                    <img src={`${baseUrl}/icons/${message.senderIcon}`} alt="Sender Icon" className="user-icon" />
                                     <strong>{message.senderName}: </strong>
                                     {message.content}
                                 </div>
