@@ -14,6 +14,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @PostMapping("/check-username")
+    public ResponseEntity<Boolean> checkUsername(@RequestBody String username) {
+        boolean exists = userService.findByUsername(username) != null;
+        return ResponseEntity.ok(exists);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
         if (userService.findByUsername(user.username()) != null) {

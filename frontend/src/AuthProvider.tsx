@@ -71,6 +71,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
 
     const register = async (username: string, password: string) => {
         try {
+            const usernameExists = await checkUsernameExists(username);
+            if (usernameExists) {
+                throw new Error('Username already exists');
+            }
             const response = await fetch('/auth/register', {
                 method: 'POST',
                 headers: {
@@ -89,6 +93,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         } catch (error) {
             console.error('Error registering:', error);
             throw new Error('Registration failed');
+        }
+    };
+
+    const checkUsernameExists = async (username: string) => {
+        try {
+            const response = await axios.post('/auth/check-username', { username });
+            return response.data;
+        } catch (error) {
+            console.error('Error checking username:', error);
+            throw new Error('Username check failed');
         }
     };
 
