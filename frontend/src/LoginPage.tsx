@@ -28,11 +28,15 @@ const LoginPage: React.FC = () => {
         try {
             await register(regUsername, regPassword);
             navigate('/app/MainPage');
-        } catch (err) {
-            if (err.message === 'Username already exists') {
-                setError('Username already exists');
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                if (err.message === 'Username already exists') {
+                    setError('Username already exists');
+                } else {
+                    setError('Registration failed');
+                }
             } else {
-                setError('Registration failed');
+                setError('An unexpected error occurred');
             }
         }
     };
