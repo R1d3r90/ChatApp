@@ -7,6 +7,7 @@ interface User {
     id: string;
     username: string;
     userIcon: string;
+    hasNewMessage?: boolean;
 }
 
 interface Message {
@@ -54,6 +55,11 @@ const MainPage: React.FC = () => {
         try {
             const response = await axios.get<Message[]>(`/api/messages/${user.id}/${userId}`);
             setMessages(response.data);
+            setUsersList((prevUsersList) =>
+                prevUsersList.map((u) =>
+                    u.id === userId ? { ...u, hasNewMessage: false } : u
+                )
+            );
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
@@ -86,6 +92,11 @@ const MainPage: React.FC = () => {
                 ...prevMessages,
                 savedMessage
             ]);
+            setUsersList((prevUsersList) =>
+                prevUsersList.map((u) =>
+                    u.id === selectedUser.id ? { ...u, hasNewMessage: true } : u
+                )
+            );
         } catch (error) {
             console.error('Error sending message:', error);
         }
@@ -122,7 +133,7 @@ const MainPage: React.FC = () => {
                     {user && (
                         <>
                             <h2>Welcome</h2>
-                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
+                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon"/>
                             <span>{user.username}</span>
                         </>
                     )}
@@ -133,8 +144,9 @@ const MainPage: React.FC = () => {
                 <ul>
                     {usersList.map((user) => (
                         <li key={user.id} onClick={() => handleUserClick(user)}>
-                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
+                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon"/>
                             {user.username}
+                            {user.hasNewMessage && <span className="new-message-indicator">New Message</span>}
                         </li>
                     ))}
                 </ul>
@@ -146,7 +158,7 @@ const MainPage: React.FC = () => {
                         <div className="chat-messages">
                             {messages.map((message, index) => (
                                 <div key={index} className={message.senderId === user?.id ? "outgoing" : "incoming"}>
-                                    <img src={`/icons/${message.senderIcon}`} alt="Sender Icon" className="user-icon" />
+                                    <img src={`/icons/${message.senderIcon}`} alt="Sender Icon" className="user-icon"/>
                                     <strong>{message.senderName}: </strong>
                                     {message.content}
                                 </div>
