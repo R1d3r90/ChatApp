@@ -94,7 +94,7 @@ const MainPage: React.FC = () => {
         setSelectedUser(user);
         setUsersList((prevUsersList) =>
             prevUsersList.map((u) =>
-                u.id === user.id ? { ...u, hasNewMessage: false } : u
+                u.id === user.id ? {...u, hasNewMessage: false} : u
             )
         );
     };
@@ -158,7 +158,7 @@ const MainPage: React.FC = () => {
                     {user && (
                         <>
                             <h2>Welcome</h2>
-                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
+                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon"/>
                             <span>{user.username}</span>
                         </>
                     )}
@@ -169,7 +169,7 @@ const MainPage: React.FC = () => {
                 <ul>
                     {usersList.map((user) => (
                         <li key={user.id} onClick={() => handleUserClick(user)}>
-                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
+                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon"/>
                             {user.username}
                             {user.hasNewMessage && <span className="new-message-indicator">New</span>}
                         </li>
@@ -183,7 +183,7 @@ const MainPage: React.FC = () => {
                         <div className="chat-messages">
                             {messages.map((message, index) => (
                                 <div key={index} className={message.senderId === user?.id ? "outgoing" : "incoming"}>
-                                    <img src={`/icons/${message.senderIcon}`} alt="Sender Icon" className="user-icon" />
+                                    <img src={`/icons/${message.senderIcon}`} alt="Sender Icon" className="user-icon"/>
                                     <strong>{message.senderName}: </strong>
                                     {message.content}
                                 </div>
