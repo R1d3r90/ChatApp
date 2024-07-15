@@ -29,15 +29,23 @@ const MainPage: React.FC = () => {
 
     useEffect(() => {
         fetchUsers();
-        const intervalId = setInterval(fetchAllMessages, 3000);
-        return () => clearInterval(intervalId);
     }, []);
 
     useEffect(() => {
         if (selectedUser) {
             fetchMessages(selectedUser.id);
+            const intervalId = setInterval(() =>
+                fetchMessages(selectedUser.id), 3000);
+            return () => clearInterval(intervalId);
         }
     }, [selectedUser]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            fetchAllMessages();
+        }, 3000);
+        return () => clearInterval(intervalId);
+    }, []);
 
     const fetchUsers = async () => {
         try {
