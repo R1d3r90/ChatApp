@@ -40,6 +40,13 @@ const MainPage: React.FC = () => {
         }
     }, [selectedUser]);
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            fetchAllMessages();
+        }, 3000);
+        return () => clearInterval(intervalId);
+    }, []);
+
     const fetchUsers = async () => {
         try {
             const userList = await getUsers();
@@ -55,18 +62,41 @@ const MainPage: React.FC = () => {
         try {
             const response = await axios.get<Message[]>(`/api/messages/${user.id}/${userId}`);
             setMessages(response.data);
-            setUsersList((prevUsersList) =>
-                prevUsersList.map((u) =>
-                    u.id === userId ? { ...u, hasNewMessage: false } : u
-                )
-            );
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
     };
 
+    const fetchAllMessages = async () => {
+        if (!user) return;
+
+        try {
+            const response = await axios.get<Message[]>(`/api/messages/all/${user.id}`);
+            const messages = response.data;
+
+            const newMessagesMap: { [key: string]: boolean } = {};
+            messages.forEach((message) => {
+                newMessagesMap[message.senderId] = true;
+            });
+
+            setUsersList((prevUsersList) =>
+                prevUsersList.map((u) => ({
+                    ...u,
+                    hasNewMessage: newMessagesMap[u.id] || false,
+                }))
+            );
+        } catch (error) {
+            console.error('Error fetching all messages:', error);
+        }
+    };
+
     const handleUserClick = (user: User) => {
         setSelectedUser(user);
+        setUsersList((prevUsersList) =>
+            prevUsersList.map((u) =>
+                u.id === user.id ? { ...u, hasNewMessage: false } : u
+            )
+        );
     };
 
     const sendMessage = async (e: React.FormEvent) => {
@@ -92,11 +122,6 @@ const MainPage: React.FC = () => {
                 ...prevMessages,
                 savedMessage
             ]);
-            setUsersList((prevUsersList) =>
-                prevUsersList.map((u) =>
-                    u.id === selectedUser.id ? { ...u, hasNewMessage: true } : u
-                )
-            );
         } catch (error) {
             console.error('Error sending message:', error);
         }
@@ -133,7 +158,7 @@ const MainPage: React.FC = () => {
                     {user && (
                         <>
                             <h2>Welcome</h2>
-                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon"/>
+                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
                             <span>{user.username}</span>
                         </>
                     )}
@@ -144,9 +169,9 @@ const MainPage: React.FC = () => {
                 <ul>
                     {usersList.map((user) => (
                         <li key={user.id} onClick={() => handleUserClick(user)}>
-                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon"/>
+                            <img src={`/icons/${user.userIcon}`} alt="User Icon" className="user-icon" />
                             {user.username}
-                            {user.hasNewMessage && <span className="new-message-indicator">New Message</span>}
+                            {user.hasNewMessage && <span className="new-message-indicator">New</span>}
                         </li>
                     ))}
                 </ul>
@@ -158,7 +183,7 @@ const MainPage: React.FC = () => {
                         <div className="chat-messages">
                             {messages.map((message, index) => (
                                 <div key={index} className={message.senderId === user?.id ? "outgoing" : "incoming"}>
-                                    <img src={`/icons/${message.senderIcon}`} alt="Sender Icon" className="user-icon"/>
+                                    <img src={`/icons/${message.senderIcon}`} alt="Sender Icon" className="user-icon" />
                                     <strong>{message.senderName}: </strong>
                                     {message.content}
                                 </div>
