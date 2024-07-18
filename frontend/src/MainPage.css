@@ -93,6 +93,13 @@
         padding: 10px;
     }
 
+    .user-icon {
+        width: 65px;
+        height: 65px;
+        border-radius: 100%;
+        margin-right: 10px;
+    }
+
     .user-list-container {
         flex: 0 0 auto;
         width: 100%;
