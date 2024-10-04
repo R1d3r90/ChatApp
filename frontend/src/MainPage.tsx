@@ -11,6 +11,7 @@ interface User {
 }
 
 interface Message {
+    id: string
     senderId: string;
     senderName: string;
     senderIcon: string;
