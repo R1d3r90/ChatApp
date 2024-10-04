@@ -108,7 +108,7 @@ const MainPage: React.FC = () => {
         );
         for (const message of messages) {
             if (!message.isRead && message.receiverId === user.id) {
-                await axios.patch(`/api/messages/markAsRead/${message.id}`);
+                await axios.patch(`/api/messages/read/${message.id}`);
             }
         }
     };
