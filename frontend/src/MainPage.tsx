@@ -106,11 +106,11 @@ const MainPage: React.FC = () => {
                 u.id === user.id ? {...u, hasNewMessage: false} : u
             )
         );
-        messages.forEach(async(message) => {
+        for (const message of messages) {
             if (!message.isRead && message.receiverId === user.id) {
                 await axios.patch(`/api/messages/markAsRead/${message.id}`);
             }
-        });
+        }
     };
 
     const sendMessage = async (e: React.FormEvent) => {
