@@ -99,7 +99,7 @@ const MainPage: React.FC = () => {
         }
     };
 
-    const handleUserClick = (user: User) => {
+    const handleUserClick = async (user: User) => {
         setSelectedUser(user);
         setUsersList((prevUsersList) =>
             prevUsersList.map((u) =>
