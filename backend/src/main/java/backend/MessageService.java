@@ -42,7 +42,7 @@ public class MessageService {
     public void markMessageAsRead(String messageId) {
        Message message = messageRepository.findById(messageId)
            .orElseThrow(() -> new RuntimeException("Message not found"));
-       message.setRead(true); 
+       message = message.withReadStatus(true); 
        messageRepository.save(message);
     }
 }
