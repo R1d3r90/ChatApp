@@ -40,10 +40,9 @@ public class MessageService {
     }
 
     public void markMessageAsRead(String messageId) {
-        Message message = messageRepository.findById(messageId).orElseThrow(() -> new RuntimeException("Message not found"));
-        messageRepository.save(new Message(message.id(), message.senderId(), message.senderName(),
-                                             message.senderIcon(), message.receiverId(),
-                                             message.receiverName(), message.receiverIcon(),
-                                             message.content(), true)); 
+       Message message = messageRepository.findById(messageId)
+           .orElseThrow(() -> new RuntimeException("Message not found"));
+       message.setRead(true); 
+       messageRepository.save(message);
     }
 }
