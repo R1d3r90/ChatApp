@@ -118,7 +118,7 @@ const MainPage: React.FC = () => {
 
         if (!selectedUser || !user) return;
 
-        const message: Message = {
+        const message: Omit<Message, 'id'> = {
             senderId: user.id,
             senderName: user.username,
             senderIcon: user.userIcon,
@@ -132,7 +132,7 @@ const MainPage: React.FC = () => {
 
         try {
             const response = await axios.post('/api/messages/send', message);
-            const savedMessage = response.data;
+            const savedMessage: Message = response.data;
 
             setMessages((prevMessages) => [
                 ...prevMessages,
