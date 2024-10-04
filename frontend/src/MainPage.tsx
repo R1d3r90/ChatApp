@@ -18,6 +18,7 @@ interface Message {
     receiverName: string;
     receiverIcon: string;
     content: string;
+    isRead: boolean;
 }
 
 const MainPage: React.FC = () => {
@@ -58,15 +59,22 @@ const MainPage: React.FC = () => {
 
     const fetchMessages = async (userId: string) => {
         if (!user) return;
-
+    
         try {
             const response = await axios.get<Message[]>(`/api/messages/${user.id}/${userId}`);
             setMessages(response.data);
+            const hasNewMessage = response.data.some(msg => !msg.isRead);
+            setUsersList(prevUsersList =>
+                prevUsersList.map(u =>
+                    u.id === userId ? { ...u, hasNewMessage } : u
+                )
+            );
+    
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
     };
-
+    
     const fetchAllMessages = async () => {
         if (!user) return;
 
@@ -97,6 +105,11 @@ const MainPage: React.FC = () => {
                 u.id === user.id ? {...u, hasNewMessage: false} : u
             )
         );
+        messages.forEach(async(message) => {
+            if (!message.isRead && message.receiverId === user.id) {
+                await axios.patch(`/api/messages/markAsRead/${message.id}`);
+            }
+        });
     };
 
     const sendMessage = async (e: React.FormEvent) => {
@@ -112,6 +125,8 @@ const MainPage: React.FC = () => {
             receiverName: selectedUser.username,
             receiverIcon: selectedUser.userIcon,
             content: input,
+            isRead: false,
+            
         };
 
         try {

@@ -1,9 +1,9 @@
 package backend;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class MessageService {
@@ -33,9 +33,17 @@ public class MessageService {
                 receiver.id(),
                 receiver.username(),
                 receiver.userIcon(),
-                message.content()
+                message.content(),
+                false
         );
-
         messageRepository.save(newMessage);
+    }
+
+    public void markMessageAsRead(String messageId) {
+        Message message = messageRepository.findById(messageId).orElseThrow(() -> new RuntimeException("Message not found"));
+        messageRepository.save(new Message(message.id(), message.senderId(), message.senderName(),
+                                             message.senderIcon(), message.receiverId(),
+                                             message.receiverName(), message.receiverIcon(),
+                                             message.content(), true)); 
     }
 }

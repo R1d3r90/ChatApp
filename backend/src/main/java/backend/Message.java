@@ -12,6 +12,7 @@ public record Message(
         String receiverId,
         String receiverName,
         String receiverIcon,
-        String content
+        String content,
+        boolean isRead
 ) {
 }
