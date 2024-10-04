@@ -15,4 +15,7 @@ public record Message(
         String content,
         boolean isRead
 ) {
+    public Message withReadStatus(boolean isRead) {
+        return new Message(id, senderId, senderName, senderIcon, receiverId, receiverName, receiverIcon, content, isRead);
+    }
 }
